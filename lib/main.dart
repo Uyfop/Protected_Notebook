@@ -4,7 +4,7 @@ import 'mock/mock_login.dart';
 
 void main() {
   runApp(const MyApp());
-  initializeActiveUsers();
+  initializeDefaultUsers();
 }
 
 class MyApp extends StatelessWidget {

@@ -1,20 +1,27 @@
-const List<Map<String, String>> users = [
+import 'package:shared_preferences/shared_preferences.dart';
+
+const List<Map<String, String>> defaultUsers = [
   {
     'username': 'user1',
     'password': 'user1',
-    'message': '',
-    'token': 'user1token',
+    'message': 'Welcome to Secure Notebook, user1!',
   },
   {
     'username': 'user2',
     'password': 'user2',
-    'message': '',
-    'token': 'user2token',
+    'message': 'Welcome to Secure Notebook, user2!',
   },
 ];
 
-List<Map<String, String>> activeUsers = [];
+Future<void> initializeDefaultUsers() async {
+  final prefs = await SharedPreferences.getInstance();
 
-void initializeActiveUsers() {
-  activeUsers = List.from(users.map((user) => Map<String, String>.from(user)));
+  for (var user in defaultUsers) {
+    String? storedPassword = prefs.getString('${user['username']}_password');
+
+    if (storedPassword == null) {
+      await prefs.setString('${user['username']}_password', user['password']!);
+      await prefs.setString('${user['username']}_message', user['message']!);
+    }
+  }
 }

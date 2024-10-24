@@ -32,9 +32,9 @@ class _NotebookPageState extends State<NotebookPage> {
     _messageController.text = widget.message;
   }
 
-  void _saveMessage() {
+  Future<void> _saveMessage() async{
     try {
-      widget.notebook.setMessage(widget.user['username']!, widget.user['password']!, _messageController.text);
+      await widget.notebook.setMessage(widget.user['username']!, widget.user['password']!, _messageController.text);
       setState(() {
         _successMessage = 'Message saved';
         _errorMessage = '';
@@ -47,9 +47,9 @@ class _NotebookPageState extends State<NotebookPage> {
     }
   }
 
-  void _changePassword() {
+  Future<void> _changePassword() async{
     try {
-      widget.notebook.changePassword(
+      await widget.notebook.changePassword(
           _oldPasswordController.text, _newPasswordController.text);
       setState(() {
         _successMessage = 'Password saved';

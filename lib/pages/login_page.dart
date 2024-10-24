@@ -21,23 +21,20 @@ class _LoginPageState extends State<LoginPage> {
 
   }
 
-  void _login() {
+  Future<void> _login() async {
     String username = _usernameController.text;
     String password = _passwordController.text;
 
     if (username.isEmpty) {
       setState(() {
-        _errorMessage = 'Username cant be empty';
+        _errorMessage = 'Username can\'t be empty';
       });
       return;
     }
 
-    final user = activeUsers.firstWhere(
-          (user) => user['username'] == username,
-      orElse: () => {},
-    );
+    final user = await SecureNotebook.loadFromSharedPreferences(username);
 
-    if (user.isNotEmpty && user['password'] == password) {
+    if (user != null && SecureNotebook(user).verifyPassword(password)) {
       SecureNotebook notebook = SecureNotebook(user);
       Navigator.push(
         context,
@@ -69,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             TextField(
               controller: _usernameController,
-              obscureText: true,
+              obscureText: false,
               decoration: const InputDecoration(
                 labelText: 'Username',
                 border: OutlineInputBorder(),
